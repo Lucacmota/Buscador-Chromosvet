@@ -75,7 +75,7 @@ def selecionar_diretorio():
         entrada_diretorio.insert(0, diretorio)
 
 root = tk.Tk()
-root.title("Chromosvet busca")
+root.title("Buscar em PDF")
 
 style = ttk.Style()
 style.theme_use('default')
