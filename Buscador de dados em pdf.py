@@ -12,19 +12,27 @@ def buscar_numero_em_pdf(numero, diretorio, progresso_var):
             if nome_arquivo.endswith(".pdf"):
                 caminho_arquivo = os.path.join(pasta_raiz, nome_arquivo)
 
-                documento = fitz.open(caminho_arquivo)
+                try:
+                    documento = fitz.open(caminho_arquivo)
 
-                for numero_pagina in range(len(documento)):
-                    pagina = documento.load_page(numero_pagina)
-                    texto_pagina = pagina.get_text()
-                    if numero in texto_pagina:
-                        resultados.append((nome_arquivo, pasta_raiz))
-                        break
+                    for numero_pagina in range(len(documento)):
+                        pagina = documento.load_page(numero_pagina)
+                        texto_pagina = pagina.get_text()
+                        if numero in texto_pagina:
+                            resultados.append((nome_arquivo, pasta_raiz))
+                            break
 
-                    progresso_var.set(numero_pagina / len(documento) * 100)
-                    root.update_idletasks()
+                        progresso_var.set(numero_pagina / len(documento) * 100)
+                        root.update_idletasks()
 
-                documento.close()
+                    documento.close()
+
+                except ValueError as e:
+                    # Pular arquivos criptografados ou fechados
+                    print(f"Arquivo {nome_arquivo} não pôde ser aberto: {e}")
+                except Exception as e:
+                    # Pular qualquer outro erro
+                    print(f"Erro ao processar o arquivo {nome_arquivo}: {e}")
 
     return resultados
 
